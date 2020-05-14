@@ -4,32 +4,40 @@ import './FullPost.css';
 
 class FullPost extends Component {
     state = {
-        loadedPost: null
+        loadedPost: null,
+        loading:true
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.props.id !== prevProps.id) {
-            axios.get('/posts/' + this.props.id)
+    componentDidMount() {
+        this.loadData();
+    }
+
+    componentDidUpdate() {
+        this.loadData();
+    }
+
+    loadData = () => {
+        if(!this.state.loadedPost || this.state.loadedPost.id !== parseInt(this.props.match.params.id,10)) {
+            axios.get('/posts/' + this.props.match.params.id)
                 .then(response => {
-                        console.log(response)
-                        this.setState({loadedPost:response.data})
+                        this.setState({loadedPost:response.data,loading:false})
                     }
                 )
-
         }
     }
 
     deletePostHandler = () => {
-        axios.delete('/posts/' + this.props.id)
+        axios.delete('/posts/' + this.props.match.params.id)
             .then(response => {
-               console.log(response);
+               console.log("Post Deleted Successfully");
+               this.setState({loadedPost: null})
             });
     }
 
     render () {
-        let post = <p style={{textAlign:'center'}}>Please select a Post!</p>;
+        let post = <p style={{textAlign:'center'}}>Something went wrong!</p>;
 
-        if(this.props.id) {
+        if(this.props.match.params.id && this.state.loading) {
             post = <p style={{textAlign: 'center'}}>Loading.... !</p>;
         }
 

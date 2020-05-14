@@ -10,8 +10,7 @@ axios.defaults.headers.common['Authorization']='AUTH TOKEN';
 axios.defaults.headers.post['Content-Type']='application/json';
 
 axios.interceptors.request.use( request => {
-    console.log('[Interceptor onRequest]');
-    console.log(request);
+    console.log('[Interceptor onRequest]', request);
     return request;
 }, error => {
     console.log('[Interceptor onError / Request going out]');
@@ -20,12 +19,10 @@ axios.interceptors.request.use( request => {
 });
 
 axios.interceptors.response.use( response => {
-    console.log('[Interceptor onResponse]');
-    console.log(response);
+    console.log('[Interceptor onResponse]',response);
     return response;
 }, error => {
-    console.log('[Interceptor onError / Response going in]');
-    console.log(error);
+    console.log('[Interceptor onError / Response going in]',error);
     return Promise.reject(error);
 });
 
